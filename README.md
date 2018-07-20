@@ -9,12 +9,11 @@ your MePOS unit.
 ## Contents
 - [Supported platforms](#supported-platforms)
 - [Supported MePOS firmware](#supported-mepos-firmware)
-- [Use of the MePOS connect SDK on Android](#use-of-the-mepos-connect-sdk-on-android)
+- [Use of the MePOS Connect SDK on Java](#use-of-the-mepos-connect-sdk-on-java)
   - [Libraries](#libraries)
   - [Add the SDK to your project](#add-the-sdk-to-your-project)
   - [Creating a new MePOS object](#creating-a-new-mepos-object)
   - [Adding log levels](#adding-log-levels)
-  - [General recommendations on Android](#general-recommendations-on-android)
 - [MePOS SDK Methods](#mepos-sdk-methods)
   - [int setDiagnosticLed(int position, int colour)](#int-setdiagnosticledint-position-int-colour)
   - [int setLedOneCol(Integer colour), int setLedTwoCol(Integer colour), int setLedThreeCol(Integer colour)](#int-setledonecolinteger-colour-int-setledtwocolinteger-colour-int-setledthreecolinteger-colour)
@@ -80,11 +79,10 @@ The MePOS connect SDK has been tested with the latest MePOS 3.1 firmware.
 ## Use of the MePOS Connect SDK on Java
 
 ### Libraries
+
 The MePOS Connect SDK for Java currently includes one jar.
 
 * meepos-sdk.jar
-
-  The MePOS connect library is provided for Android as an aar file for use with Android Studio.
 
 ### Add the SDK to your project
 
@@ -100,41 +98,15 @@ Continue [here](#creating-a-new-mepos-object)
 **import com.uniquesecure.meposconnect.*;**
 
 ### Creating a new MePOS object
+
   To instantiate a new class to communicate with the MePOS unit, you will need to add the following code to your application:
 
+##### MePOS mePOS = new MePOS();
 
-##### MePOS mePOS = new MePOS(context);
-
-
-  The above code has now instantiated a MePOS object, the required context parameter is needed for the MePOS class to gain access to the USB device.
-  It is also needed to dispose the instance when the MePOS is disconnected from USB. To achieve this, you will need to add an IntentFilter and a BroadcastReceiver:
-
-```java
-IntentFilter intentFilter = new IntentFilter();
-intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_ATTACHED");
-intentFilter.addAction("android.hardware.usb.action.USB_DEVICE_DETACHED");
-BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-
- @Override
- public void onReceive(Context context, Intent intent) {
- if (intent.getAction().contains("ATTACHED")) {
- myMePOSInstance = new MePOS(context, MePOSConnectionType.USB);
- Toast.makeText(MyActivity.this, "MePOS connected", Toast.LENGTH_SHORT).show();
- } else if (intent.getAction().contains("DETACHED")){
- myMePOSInstance.getConnectionManager().disconnect();
- Toast.makeText(MyActivity.this, "MePOS disconnected", Toast.LENGTH_SHORT).show();
- }
-}
-getApplicationContext().registerReceiver(broadcastReceiver, intentFilter);
-```
-
-If there are multiple devices to access, each one will be controlled with an Instance of MePOS, but it is needed
-to use the following constructor:
-
+  The above code has now instantiated a MePOS object.
+  
 ##### MePOS mePOS = new MePOS(context, MePOSConnectionType.USB);
 ##### MePOS mePOS = new MePOS(context, MePOSConnectionType.WIFI);
-##### MePOS mePOS = new MePOS(context, MePOSConnectionType.GENERIC_USB);
-##### MePOS mePOS = new MePOS(context, MePOSConnectionType.GENERIC_WIFI);
 
 ### Adding log levels
 
@@ -150,13 +122,8 @@ mepos.setLoggingLevel(MePOSLogger.LEVEL_ERROR); //error level
 
 By default the Log is set to `LEVEL_ERROR`.
 
-### General recommendations on Android
-- While using another devices connected in the MePOS USB HUB, make sure no other app has been set up as default while connecting the external usb devices in the android Launcher. See <a href="http://android.stackexchange.com/questions/148161/how-to-set-home-launcher-in-android-7-0-nougat" target="_blank"> this post for more info </a>.
-- Please be noticed that the acknowledgement of USB permissions are not available while the tablet is on sleep mode. Make sure the MePOS instances over USB are created when the tablet is running in foreground.
-- If you are using a **BroadcastReceiver** to detect when the tablet is attached to the MePOS please be aware of the general lifecycle on Activities/Fragments/Application in Android development. Note that some of the methods **onPause()** or **onResume()** are triggered when detecting an attach/detach. See this example: If you connect a usb device on the MePOS and then connect it to the tablet, the onReceive method would be called. This might detect your usb accesory ***or*** the mePOS. If you then call the **unregisterReceiver(broadcastReceiver)** on the **onPause()** method you might not detect next when the next USB device is connected, and that would be the MePOS. As a result in this example you won't detect for the attachment correctly.
-
-
 ### MePOS SDK Methods
+
 Once a MePOS object has been created there are several methods that can be executed that perform actions on
 the MePOS unit. The method names, syntax and usage are identical across the Android platform. Note that
 some of them are not recommended to execute on the main Thread.
