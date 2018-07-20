@@ -1,0 +1,2 @@
+# MePOSJavaSDK
+MePOS Connect SDK
