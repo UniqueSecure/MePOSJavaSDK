@@ -1,4 +1,4 @@
-# MePOS Connect Java SDK version 0.1
+# MePOS Connect Java SDK version 0.1.1
 
 The MePOS Connect Java SDK is designed to allow communication from a desktop envriroment to the MePOS host unit.
 
