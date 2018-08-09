@@ -1,4 +1,4 @@
-# MePOS Connect Java SDK version 1.0
+# MePOS Connect Java SDK version 1.1
 
 The MePOS Connect Java SDK is designed to allow communication from a desktop envriroment to the MePOS host unit.
 
@@ -57,7 +57,8 @@ your MePOS unit.
   - [setFeedAfterCut(int feedLines)](#setfeedaftercutint-feedlines)
   - [MePOSReceiptBarcodeLine(int type, String data)](#meposreceiptbarcodelineint-type-string-data)
   - [MePOSReceiptFeedLine(int lines)](#meposreceiptfeedlineint-lines)
-  - [MePOSReceiptImageLine(Bitmap image)](#meposreceiptimagelinebitmap-image)
+  - [MePOSReceiptImageLine(Path path)](#meposreceiptimagelinepath-image)
+  - [MePOSReceiptImageLine(BufferedImage image)](#meposreceiptimagelinebufferedimage-image)
   - [MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)](#meposreceiptpricelinestring-lefttext-int-leftstyle-string-righttext-int-rightstyle)
   - [MePOSReceiptSingleCharLine(char chr)](#meposreceiptsinglecharlinechar-chr)
   - [MePOSReceiptSingleCharLine(char chr)](#meposreceipttextlinestring-text-int-style-int-size-int-position)
@@ -82,7 +83,7 @@ The MePOS connect SDK has been tested with the latest MePOS 3.1 firmware.
 
 The MePOS Connect SDK for Java currently includes one jar.
 
-* meepos-sdk.jar
+* meposconnect-java.jar
 
 ### Add the SDK to your project
 
@@ -100,33 +101,34 @@ Continue [here](#creating-a-new-mepos-object)
 ### Creating a new MePOS object
 
   To instantiate a new class to communicate with the MePOS unit, you will need to add the following code to your application:
-
-##### MePOS mePOS = new MePOS();
+  
+##### MePOS mePOS = new MePOS(MePOSConnectionType.USB);
+##### MePOS mePOS = new MePOS(MePOSConnectionType.WIFI);
 
   The above code has now instantiated a MePOS object.
-  
-##### MePOS mePOS = new MePOS(context, MePOSConnectionType.USB);
-##### MePOS mePOS = new MePOS(context, MePOSConnectionType.WIFI);
 
 ### Adding log levels
 
-If you need to output info to the logcat you can define the logging levels using the following code
+  If you need to output log info into the console you can use the next constructor
 
-```java
-mepos.setLoggingLevel(MePOSLogger.LEVEL_TRACE); //trace level
-mepos.setLoggingLevel(MePOSLogger.LEVEL_DEBUG); //debug level
-mepos.setLoggingLevel(MePOSLogger.LEVEL_INFO); //info elvel 
-mepos.setLoggingLevel(MePOSLogger.LEVEL_ERROR); //error level
+##### MePOS(MePOSConnectionType type, MePOSLogger.LOG_LEVEL level);
 
-```
+  The MePOSLogger.LOG_LEVEL's are LEVEL_TRACE, LEVEL_DEBUG, LEVEL_INFO, LEVEL_ERROR.
+  
+  By default the MePOSLogger.LOG_LEVEL is set to `LEVEL_ERROR`.
 
-By default the Log is set to `LEVEL_ERROR`.
+### Adding a custom logger
+
+  If you need to output log info into your own application you can use the next constructor
+
+##### MePOS(MePOSConnectionType type, MePOSLogger.LOG_LEVEL level, MePOSLogger.LoggerListener listener);
+
+  The object MePOSLogger.LoggerListener will receive all the events basted on the MePOSLogger.LOG_LEVEL.
 
 ### MePOS SDK Methods
 
 Once a MePOS object has been created there are several methods that can be executed that perform actions on
-the MePOS unit. The method names, syntax and usage are identical across the Android platform. Note that
-some of them are not recommended to execute on the main Thread.
+the MePOS unit. Note that some of them are not recommended to execute on the main Thread.
 
 ### int setDiagnosticLed(int position, int colour)
 
@@ -265,7 +267,7 @@ Will set the MePOS cosmetic LED to one of the following colours:
 
 ### terminateCommunication()
 
-  Terminates the bidirectional communication with the MePOS, it is good practice to call this method when not interested in receiving notifications from MePOS.
+  Terminates the bidirectional communication with the MePOS, it is good practice to call this method when not interested in receiving notifications from MePOS. The developer must garantee to innvoke this method before exiting their program.
 
 ### setConnectionIPAddress(string IPAddress)
 
@@ -397,12 +399,21 @@ Will set the MePOS cosmetic LED to one of the following colours:
   ***MePOSReceipt r = new MePOSReceipt();***
   ***r.AddLine(new MePOSReceiptFeedLine(10);***
 
-### MePOSReceiptImageLine(Bitmap image)
-  The image line can be used to print black and white raster graphics to the printer. The bitmap provided must be a valid Android.graphics.Bitmap for Anroid or System.Drawing.Bitmap for Windows, the image size should be 576 x 200 pixels
+### MePOSReceiptImageLine(Path path)
+
+  The image line can be used to print black and white raster graphics to the printer. The path provided must be a valid java.nio.file.Path, the image size should be 576 x 200 pixels
 
   The following example shows how to add an image to a receipt:
   ***MePOSReceipt r = new MePOSReceipt();***
-  ***r.AddLine(new MePOSReceiptImageLine(bitmap);***
+  ***r.AddLine(new MePOSReceiptImageLine(path);***
+
+### MePOSReceiptImageLine(BufferedImage image)
+
+  The image line can be used to print black and white raster graphics to the printer. The bitmap provided must be a valid java.awt.image.BufferedImage, the image size should be 576 x 200 pixels
+
+  The following example shows how to add an image to a receipt:
+  ***MePOSReceipt r = new MePOSReceipt();***
+  ***r.AddLine(new MePOSReceiptImageLine(image);***
 
 ### MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)
 
