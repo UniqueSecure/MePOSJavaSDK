@@ -19,6 +19,9 @@ your MePOS unit.
   - [int setLedOneCol(Integer colour), int setLedTwoCol(Integer colour), int setLedThreeCol(Integer colour)](#int-setledonecolinteger-colour-int-setledtwocolinteger-colour-int-setledthreecolinteger-colour)
   - [int setCosmeticLedCol(Integer colour)](#int-setcosmeticledcolinteger-colour)
   - [boolean printerBusy()](#boolean-printerbusy)
+  - [boolean loadImage(InputStream stream) throws MePOSException](#boolean-loadimageinputstream-stream-throws-meposexception)
+  - [boolean loadImage(Path path) throws MePOSException](#boolean-loadimagepath-path-throws-meposexception)
+  - [boolean loadImage(BufferedImage image) throws MePOSException](#boolean-loadimagebufferedimage-image-throws-meposexception)
   - [int print(MePOSReceipt receipt)](#int-printmeposreceipt-receipt)
   - [int print(MePOSReceipt receipt, MePOSPrinterCallback callback)](#int-printmeposreceipt-receipt-meposprintercallback-callback)
   - [int printRAW(String command)](#meposreceipt-r--new-meposreceipt)
@@ -59,6 +62,7 @@ your MePOS unit.
   - [MePOSReceiptFeedLine(int lines)](#meposreceiptfeedlineint-lines)
   - [MePOSReceiptImageLine(Path path)](#meposreceiptimagelinepath-image)
   - [MePOSReceiptImageLine(BufferedImage image)](#meposreceiptimagelinebufferedimage-image)
+  - [MePOSReceiptImageBufferLine()](#meposreceiptimagebufferline)
   - [MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)](#meposreceiptpricelinestring-lefttext-int-leftstyle-string-righttext-int-rightstyle)
   - [MePOSReceiptSingleCharLine(char chr)](#meposreceiptsinglecharlinechar-chr)
   - [MePOSReceiptSingleCharLine(char chr)](#meposreceipttextlinestring-text-int-style-int-size-int-position)
@@ -167,6 +171,18 @@ Will set the MePOS cosmetic LED to one of the following colours:
   - MePOSColorCodes.COSMETIC_YELLOW
 
   - MePOSColorCodes.COSMETIC_WHITE
+
+### boolean loadImage(InputStream stream) throws MePOSException
+
+  Loads the image contained in the stream to the printer
+
+### boolean loadImage(Path path) throws MePOSException
+
+  Loads the image contained in the path to the printer
+
+### boolean loadImage(BufferedImage image) throws MePOSException
+
+  Loads the image to the printer
 
 ### boolean printerBusy()
 
@@ -414,6 +430,14 @@ Will set the MePOS cosmetic LED to one of the following colours:
   The following example shows how to add an image to a receipt:
   ***MePOSReceipt r = new MePOSReceipt();***
   ***r.AddLine(new MePOSReceiptImageLine(image);***
+
+### MePOSReceiptImageBufferLine()
+
+  The image buffer line can be used to print the image loaded to the printer
+
+  The following example shows how to add an image to a receipt:
+  ***MePOSReceipt r = new MePOSReceipt();***
+  ***r.AddLine(new MePOSReceiptImageBufferLine();***
 
 ### MePOSReceiptPriceLine(String leftText, int leftStyle, String rightText, int rightStyle)
 
