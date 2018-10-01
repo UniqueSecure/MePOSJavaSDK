@@ -174,15 +174,15 @@ Will set the MePOS cosmetic LED to one of the following colours:
 
 ### boolean loadImage(InputStream stream) throws MePOSException
 
-  Loads the image contained in the stream to the printer
+  Loads the image contained in the stream to the printer, it is advisable to load the image to the printer about 2-3 seconds before trying to print it from memory.
 
 ### boolean loadImage(Path path) throws MePOSException
 
-  Loads the image contained in the path to the printer
+  Loads the image contained in the path to the printer, it is advisable to load the image to the printer about 2-3 seconds before trying to print it from memory.
 
 ### boolean loadImage(BufferedImage image) throws MePOSException
 
-  Loads the image to the printer
+  Loads the image to the printer, it is advisable to load the image to the printer about 2-3 seconds before trying to print it from memory.
 
 ### boolean printerBusy()
 
